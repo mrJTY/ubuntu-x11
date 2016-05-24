@@ -1,38 +1,56 @@
-# How to run gui apps in osx
-
 # Using X forwarding in ssh
 
-## In host/docker linux
-
-Change /etc/ssh/sshd_config
+# 1. INSIDE CONTAINER
+## 1.1 Change /etc/ssh/sshd_config
 
 ```
-            X11Forwarding yes
+X11Forwarding yes
 ```
-### Create a user WITH a home address
+
+## 1.2 Create a user WITH a home address
 
 ```
 useradd -m user
 passwd user
 ```
 
-### Run /usr/sbin/sshd daemon
+## 1.3 Run /usr/sbin/sshd daemon
 
-## In client:
-boot2docker this becomes confusing with the vm
-realMachinePort -> vmPort -> dockerContainer port
+# 2. In client / local machine:
 
-```
-ssh -X user@<host> -p <portOfBoot2Docker>
-```
-
-edit /etc/ssh_config
+## In client edit /etc/ssh_config
 
 ```
 Host * X11Forwarding yes
 ```
 
+## 2.1 Boot2Docker
+boot2docker this becomes confusing with the vm
+realMachinePort -> boot2docker-vmPort -> dockerContainer port
+5022(just some random port) -> 5022 -> 22
 
+In VirtualBox make sure:
+
+```
+local-machine 5022 -> boot2docker 5022
+```
+
+
+Then when running docker-run, make sure that the boot2docker port points to the ssh port of 22
+```
+docker run.... -p 5022:22
+```
+
+So you can now ssh
+
+```
+ssh -X userInContainer@localhost -p <55022, ie the local port>
+```
+
+
+## Running firefox
+
+just type firefox in terminal
 
 
 
